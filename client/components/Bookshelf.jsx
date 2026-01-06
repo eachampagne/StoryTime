@@ -15,7 +15,7 @@ const Bookshelf = () => {
     const [userBadgeObj, setUserBadgeObj] = useState({Likeable: 0, Contributor: 0, Matcher: 0})
     const [username, setUsername] = useState(user.username);
     const [badgeId, setBadgeId] = useState(1)
-    const [newUsername, setNewUsername] = useState('');
+    // const [newUsername, setNewUsername] = useState('');
   
    
     const getUserId = (username) => {
@@ -51,19 +51,19 @@ const Bookshelf = () => {
       });
     };
   
-    // Function to update the username
-    const handleUpdateUsername = () => {
-      axios
-        .put(`/user/${userId}`, { username: newUsername })
-        .then((response) => {
-          // Update the username in context
-          login({ ...user, username: newUsername });
-          setUsername(newUsername); // Update the local state
-        })
-        .catch((error) => {
-          console.error('Could not update username', error);
-        });
-    };
+    // // Function to update the username
+    // const handleUpdateUsername = () => {
+    //   axios
+    //     .put(`/user/${userId}`, { username: newUsername })
+    //     .then((response) => {
+    //       // Update the username in context
+    //       login({ ...user, username: newUsername });
+    //       setUsername(newUsername); // Update the local state
+    //     })
+    //     .catch((error) => {
+    //       console.error('Could not update username', error);
+    //     });
+    // };
   
     //runs when dom is compounded
     useEffect(() => {
@@ -117,20 +117,6 @@ const Bookshelf = () => {
       
                   </ul>
                 </div>
-            <div className="username-update">
-              <div className="username-label">
-                <strong>{username}</strong> 
-              </div>
-              <div className="update-username">
-                <input
-                  type="text"
-                  placeholder="New Username"
-                  value={newUsername}
-                  onChange={(e) => setNewUsername(e.target.value)}
-                />
-                <button onClick={handleUpdateUsername}>Update</button>
-              </div>
-            </div>
             </div>
             <h1 className='badges-header' >Badges</h1>
             </div>
