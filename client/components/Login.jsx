@@ -15,7 +15,7 @@ const Login = () => {
 
     // TODO: handle incorrect logins in some way. At least *tell* the user
     axios.post('/auth/login', { username, password })
-      then((response) => {
+      .then((response) => {
         // TODO: is response guaranteed to have data?
         if (response.data.message === 'Login successful.') {
           const userData = {
