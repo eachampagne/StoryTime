@@ -60,7 +60,14 @@ const Text = orm.define('texts', {
   timestamps: false
 });
 
+const Character = orm.define('characters', {
+  name: Sequelize.STRING,
+  bio: Sequelize.STRING,
+}, {
+  timestamps: false
+});
 
+const CharacterText = orm.define('character_text');
 
 User.hasMany(Text);
 Text.belongsTo(User);
@@ -69,15 +76,22 @@ Text.belongsTo(Prompt);
 Badges.hasMany(Prompt);
 Prompt.belongsTo(Badges);
 
+Text.belongsToMany(Character, { through: CharacterText });
+Character.belongsToMany(Text, { through: CharacterText });
+Character.belongsTo(User);
+User.hasMany(Character);
 
-
-User.sync()
-Prompt.sync()
-Text.sync()
-Badges.sync()
+User.sync();
+Prompt.sync();
+Text.sync();
+Badges.sync();
+Character.sync();
+CharacterText.sync();
 
 
 exports.User = User;
 exports.Prompt = Prompt;
 exports.Text = Text;
 exports.Badges = Badges;
+exports.Character = Character;
+exports.CharacterText = CharacterText; // not sure if this needs to be exported yet
