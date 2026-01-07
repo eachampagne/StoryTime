@@ -15,12 +15,13 @@ const Bookshelf = () => {
     const [userBadgeObj, setUserBadgeObj] = useState({Likeable: 0, Contributor: 0, Matcher: 0})
     const [username, setUsername] = useState(user.username);
     const [badgeId, setBadgeId] = useState(1)
-    console.log(username);
+
+    // gets username from the user object
 
     const getUserId = (username) => {
-      axios.get(`/user/${username}`)
-        .then((userData) => {
-          let user = userData.data[0];
+      axios.get(`/user/${username}`) // checks if user is authorized
+        .then((userData) => { // takes that  user object
+          let user = userData.data[0]; // should only be one object - will need to have a way to have no duplicate names
             if (user.badges) {
               setUserBadgesSt(user.badges)
             }
@@ -31,6 +32,8 @@ const Bookshelf = () => {
         });
     };
 
+
+    // leave - this splits the badges and makes them presentable
     const manipulateBadgeData = () => {
       userBadgesSt.split('+').forEach((badge) => {
         if(badge.length > 0){
@@ -39,23 +42,23 @@ const Bookshelf = () => {
       })
     }
 
-    //axios request to retrieve user texts by id
-    const getStoryWithResponse = (badgeId) => {
-      axios.get(`/text/user/${userId}`)
-      .then((texts) =>{
-        setUserTexts(texts.data);
-      })
-      .catch((err) => {
-        console.error('Could not retrieve texts!!', err);
-      });
-    };
+    //axios request to retrieve user texts by id - Change
+    // const getStoryWithResponse = (badgeId) => {
+    //   axios.get(`/text/user/${userId}`)
+    //   .then((texts) =>{
+    //     setUserTexts(texts.data);
+    //   })
+    //   .catch((err) => {
+    //     console.error('Could not retrieve texts!!', err);
+    //   });
+    // };
 
 
     //runs when dom is compounded
     useEffect(() => {
       getUserId(username);
-      getStoryWithResponse(badgeId)
-    }, []);
+      // getStoryWithResponse(badgeId)
+    }, []); // if no username , return an empty object
 
     //runs when userBadgeSt changes
     useEffect(() => {
@@ -74,7 +77,7 @@ const Bookshelf = () => {
             <div className='user' >
                 <div className='user-data'>
                   <ul className='user-ul'>
-              {userTexts.map((entry) => {
+              {userTexts.map((entry) => { // probably going to need to replace this with the tabel of saved stories for that user
                   return (
                     <div key={entry.id} className='user-entry-box'>
                     <div
