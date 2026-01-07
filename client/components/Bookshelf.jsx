@@ -15,9 +15,8 @@ const Bookshelf = () => {
     const [userBadgeObj, setUserBadgeObj] = useState({Likeable: 0, Contributor: 0, Matcher: 0})
     const [username, setUsername] = useState(user.username);
     const [badgeId, setBadgeId] = useState(1)
-    // const [newUsername, setNewUsername] = useState('');
-  
-   
+
+
     const getUserId = (username) => {
       axios.get(`/user/${username}`)
         .then((userData) => {
@@ -31,7 +30,7 @@ const Bookshelf = () => {
           console.error('Could not retrieve user ID', err, props.user)
         });
     };
-   
+
     const manipulateBadgeData = () => {
       userBadgesSt.split('+').forEach((badge) => {
         if(badge.length > 0){
@@ -39,7 +38,7 @@ const Bookshelf = () => {
         }
       })
     }
-  
+
     //axios request to retrieve user texts by id
     const getStoryWithResponse = (badgeId) => {
       axios.get(`/text/user/${userId}`)
@@ -50,32 +49,19 @@ const Bookshelf = () => {
         console.error('Could not retrieve texts!!', err);
       });
     };
-  
-    // // Function to update the username
-    // const handleUpdateUsername = () => {
-    //   axios
-    //     .put(`/user/${userId}`, { username: newUsername })
-    //     .then((response) => {
-    //       // Update the username in context
-    //       login({ ...user, username: newUsername });
-    //       setUsername(newUsername); // Update the local state
-    //     })
-    //     .catch((error) => {
-    //       console.error('Could not update username', error);
-    //     });
-    // };
-  
+
+
     //runs when dom is compounded
     useEffect(() => {
       getUserId(username);
       getStoryWithResponse(badgeId)
     }, []);
-    
+
     //runs when userBadgeSt changes
     useEffect(() => {
       manipulateBadgeData();
     }, [userBadgesSt])
-  
+
 
 
   return (
@@ -84,7 +70,7 @@ const Bookshelf = () => {
           <button className='user-button'>User</button>
       </Link>
           <div>
-              <h1 className='user-head'>MY STORIES</h1>
+              <h1 className='user-head'>MY SAVED STORIES</h1>
             <div className='user' >
                 <div className='user-data'>
                   <ul className='user-ul'>
@@ -108,13 +94,11 @@ const Bookshelf = () => {
                           <strong>Likes:</strong> {entry.likes}
                            &nbsp;&nbsp;&nbsp;
                           {/* <strong>Created:</strong> {entry.prompt.createdAt.substring(0, 10)} */}
-      
                         </div>
                       </div>
                     </div>
                   );
                 })}
-      
                   </ul>
                 </div>
             </div>
