@@ -5,17 +5,17 @@ import { useAuth } from './AuthContext.jsx';
 
 const Bookshelf = () => {
 
-  console.log('test');
-    // access the user state with data from context
-    const { user, login, logout } = useAuth();
 
+    // access the user state with data from context
+    const { user, login, logout } = useAuth(); // this holds the object with the current logged in user
+    console.log(useAuth());
     const [userId, setUserId] = useState(user.id);
     const [userTexts, setUserTexts] = useState([]);
     const [userBadgesSt, setUserBadgesSt] = useState('');
     const [userBadgeObj, setUserBadgeObj] = useState({Likeable: 0, Contributor: 0, Matcher: 0})
     const [username, setUsername] = useState(user.username);
     const [badgeId, setBadgeId] = useState(1)
-
+    console.log(username);
 
     const getUserId = (username) => {
       axios.get(`/user/${username}`)
