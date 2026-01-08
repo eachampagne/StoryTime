@@ -63,11 +63,15 @@ const Text = orm.define('texts', {
 // dummy table
 const FullStories = orm.define('fullStories', {
   text: Sequelize.STRING
+}, {
+  timestamps: false
 });
 // will actualy use a table like this
 const UsersBookshelves = orm.define('usersBookshelves', {
   storyId: Sequelize.INTEGER,
   userId: Sequelize.INTEGER
+}, {
+  timestamps: false
 })
 
 User.hasMany(Text);

@@ -5,8 +5,14 @@ const { FullStories, UsersBookshelf } = require('../database/index');
 // // GET to get all the saved stories with the users id
 router.get('/', (req, res) => {
   // needs to get all stories that the current user logged in has saved
-  
-  res.status(200).send('that worked')
+  FullStories.findAll({userId: userId}
+    .then((res) => {
+      res.status(200).send(res); // change
+    })
+    .catch((err) => {
+      console.err(err, 'savedStoriesRoutes GET');
+    })
+  )
 
 })
 
