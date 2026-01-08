@@ -16,7 +16,15 @@ export const SocketProvider = ({children, socket}) => {
       console.log(data);
       setProviderValue({
         ...providerValue,
-        prompt: data
+        prompt: data.words
+      });
+    });
+
+    socket.on('sync prompt', (data) => {
+      console.log(data);
+      setProviderValue({
+        ...providerValue,
+        prompt: data.words
       });
     });
 
@@ -24,6 +32,7 @@ export const SocketProvider = ({children, socket}) => {
     // I'm not sure this is necessary for an empty dependency list
     return () => {
       socket.removeAllListeners('new prompt');
+      socket.removeAllListeners('sync prompt');
     };
   }, []);
 

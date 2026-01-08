@@ -6,6 +6,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const { User } = require('./database/index')
 const { app, server, io } = require('./socket.js');
+const control = require('./control.js');
 
 const port = process.env.PORT || 8080;
 
@@ -22,11 +23,11 @@ app.use(
     saveUninitialized: true,
   })
   );
-  
+
   // Initialize Passport.js
   app.use(passport.initialize());
   app.use(passport.session());
-  
+
 
 // Passport.js local strategy for user login
 passport.use(
