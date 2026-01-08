@@ -48,6 +48,7 @@ const Post = ({text}) => {
       <p> <strong>{user.username}: </strong>{text.text} </p>
       <UpVote text={text}/>
       <p className='timeStamp'>{newTimeStamp}</p>
+      <button className='save-btn'>Save</button>
     </div>
     </div>
   )

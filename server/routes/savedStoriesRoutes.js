@@ -19,19 +19,19 @@ router.get('/:userId', (req, res) => {
 // // POST user can make a bookshelf
 // router.post('/bookshelf', (req, res) => {
 
-  
+
 // })
 
 // // PATCH be able to remove/add the stories to the shelf. Maybe even change the name
 // router.patch('/bookshelf', (req, res) => {
 
-  
+
 // })
 
 // // DELETE a story from the bookshelf. Maybe even just delete the bookshelf as a whole
 // router.delete('/bookshelf', (req, res) => {
 
-  
+
 // })
 
 module.exports = router;
