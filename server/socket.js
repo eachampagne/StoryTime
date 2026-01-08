@@ -1,18 +1,27 @@
 const { Server } = require('socket.io');
+const express = require('express');
+const { createServer } = require('http');
 
-// idea for how to pull this out of the index.js file from structure in
-// https://socket.io/get-started/basic-crud-application/
-function setUpSockets(server) {
-  const io = new Server(server); // do I want to try connectionStateRecovery?
+const control = require('./control.js');
 
-  io.on('connect', (socket) => {
-    console.log('user connected');
+const app = express();
+const server = createServer(app);
 
-    socket.on('disconnect', () => {
-      console.log('a user disconnected');
+const io = new Server(server); // do I want to try connectionStateRecovery?
+
+io.on('connect', (socket) => {
+  console.log('user connected');
+  control.generateNewPrompt()
+    .then((words) => {
+      io.emit('new prompt', words);
+    })
+    .catch((error) => {
+      console.error('Failed to generate new prompt:', error);
     });
+
+  socket.on('disconnect', () => {
+    console.log('a user disconnected');
   });
+});
 
-}
-
-module.exports = { setUpSockets };
+module.exports = { app, server, io };

@@ -1,14 +1,12 @@
 const path = require('path');
-const { createServer } = require('http');
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const { User } = require('./database/index')
-const { setUpSockets } = require('./socket.js');
+const { app, server, io } = require('./socket.js');
 
-const app = express();
 const port = process.env.PORT || 8080;
 
 // Middleware for serving static files
@@ -82,9 +80,6 @@ app.get('/*', function(req, res) {
     }
   })
 })
-
-const server = createServer(app);
-setUpSockets(server);
 
 // Start the server
 server.listen(port, () => {

@@ -5,6 +5,9 @@ const SocketContext = createContext();
 
 export const SocketProvider = ({children}) => {
   const socket = io();
+  socket.on('new prompt', (data) => {
+    console.log(data);
+  });
 
   return (
     <SocketContext.Provider value={socket}>
