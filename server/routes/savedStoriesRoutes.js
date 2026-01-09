@@ -18,7 +18,16 @@ router.get('/:userId', (req, res) => {
 
 // // POST user can make a bookshelf
 // router.post('/bookshelf', (req, res) => {
-router.post();
+router.post('/:userId', (req, res) => {
+  console.log(req.params, req.body, 'testtststts')
+  // UsersBookshelves.create({storyId: promptId, userId: req.params.userId})
+  //   .then(() => {
+  //     res.status(201).send()
+  //   })
+  //   .catch((err) => {
+  //     console.error(err, 'POST in savedStories')
+  //   })
+});
 
 // })
 

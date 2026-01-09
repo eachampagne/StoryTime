@@ -40,7 +40,7 @@ const Bookshelf = () => {
       });
     };
 
-    test()
+    //test()
     // leave - this splits the badges and makes them presentable
     const manipulateBadgeData = () => {
       userBadgesSt.split('+').forEach((badge) => {

@@ -1,13 +1,15 @@
 import React, { useState, useEffect} from 'react';
 import UpVote from './UpVote.jsx';
-//import axios from 'axios';
+import axios from 'axios';
 import { useAuth } from './AuthContext.jsx';
 
-const Post = ({text}) => {
+const Post = ({textId, text}) => {
   //console.log(username)
     // access the user state with data from context
+    console.log(textId, 'this is a key')
   const { user, logout } = useAuth();
   console.log(user.username)
+  const [userId, setUserId] = useState(user.id);
 
   //const [username, setUsername] = useState('');
   const [newTimeStamp, setNewTimeStamp] = useState('')
@@ -38,8 +40,15 @@ const Post = ({text}) => {
   
   }, []);
 
-
-
+  // post request for the save-btn
+  const saveButton = () => {
+    console.log(textId, 'HERE IS THE TEST ID')
+    axios.post('/bookshelf', {params: {userId, textId}})
+      .catch((err) => {
+        console.error(err, 'error in post request for saveButton');
+      })
+  }
+saveButton()
   return (
     <div className="text-container">
       <div className="upvote-container">

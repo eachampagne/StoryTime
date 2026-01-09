@@ -305,7 +305,8 @@ function Homepage() {
           <div>
           {
               posts.map((post) => {
-                return <Post key={post.id} text={post}/>
+                console.log(post)
+                return <Post key={post.id} text={post} textId={post.id}/>
               })
             }
 
