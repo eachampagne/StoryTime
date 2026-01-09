@@ -57,8 +57,10 @@ const roundDuration = 20000; // TODO: move to env variable?
 let roundEndTimer = null;
 let stopAfterNext = false;
 let roundData = {
-  words: []
+  words: [],
+  responses: []
 }
+let responseIdCounter = 1; // TODO: replace with id when adding response to DB!!
 
 function startRound() {
   console.log('starting a new round');
@@ -77,6 +79,11 @@ function startRound() {
 
 function endRound() {
   console.log('ending a round');
+
+  // clear roundData
+  roundData.words = [];
+  roundData.responses = [];
+
   io.emit('round end', {}); // TODO: send winner info?
   if (!stopAfterNext) {
     startRound();
@@ -87,6 +94,21 @@ function endRound() {
 
 function handleNewText(text, userId) {
   console.log(`User ${userId} posted ${text}`);
+  // TODO: integrate with database!!
+
+  const responseObject = {
+    text,
+    userId,
+    votes: 0
+  };
+  roundData.responses[responseIdCounter] = responseObject;
+  responseIdCounter++; // replace with DB id!
+
+  // I could broadcast the new post to every client except the posting one,
+  // but that would leave that client to add it to the screen itself. It seems
+  // easier to treat it as any incoming message from the server rather than adding
+  // special logic
+  io.emit('new post', responseIdCounter, responseObject);
 }
 
 function handleVote() {

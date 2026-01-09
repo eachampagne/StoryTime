@@ -6,7 +6,7 @@ export const SocketProvider = ({children, socket}) => {
   const [providerValue, setProviderValue] = useState({
     prompt: [],
     story: [],
-    responses: [],
+    responses: {},
     endTime: 0,
     socket
   });
@@ -14,18 +14,51 @@ export const SocketProvider = ({children, socket}) => {
   useEffect(() => {
     socket.on('new prompt', (data) => {
       console.log(data);
-      setProviderValue({
-        ...providerValue,
-        prompt: data.words
+      setProviderValue(prevState => {
+        return {
+          ...prevState,
+          prompt: data.words
+        }
       });
     });
 
     socket.on('sync prompt', (data) => {
       console.log(data);
-      setProviderValue({
-        ...providerValue,
-        prompt: data.words
+      setProviderValue(prevState => {
+        return {
+          ...prevState,
+          prompt: data.words,
+          responses: data.responses
+        }
       });
+    });
+
+    socket.on('new post', (responseId, responseObject) => {
+      console.log(`received message from user ${responseObject.userId} that says ${responseObject.text}`);
+      const updatedResponseMap = {
+        ...providerValue.responses,
+        [responseId]: responseObject
+      }
+      setProviderValue(prevState => {
+        return {
+          ...prevState,
+          responses: updatedResponseMap
+        }
+      })
+    });
+
+    socket.on('round end', (data) => {
+      // clear round-specific state data
+      // rethinking this - it's causing a flicker
+      // setProviderValue(prevState => {
+      //   return {
+      //     ...providerValue,
+      //     prompt: [],
+      //     story: [],
+      //     responses: {},
+      //     endTime: 0,
+      //   }
+      // });
     });
 
     // cleanup function... just in case
@@ -33,6 +66,8 @@ export const SocketProvider = ({children, socket}) => {
     return () => {
       socket.removeAllListeners('new prompt');
       socket.removeAllListeners('sync prompt');
+      socket.removeAllListeners('new post');
+      socket.removeAllListeners('round end');
     };
   }, []);
 
