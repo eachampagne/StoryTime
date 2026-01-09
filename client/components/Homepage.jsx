@@ -228,7 +228,13 @@ function Homepage() {
 
   //function to handle user submit
   const handleSubmit = () => {
-    console.log(submit);
+    console.log('submit');
+    if (input !== '') {
+      socket.emit('new text', input, userId); // do I need to send the current prompt (in case of race conditions?)
+      // or can I safely assume that it goes with the server's current prompt?
+      setInput('');
+      setTextCount(0);
+    }
     // if(input !== ''){
     //   setInput('')
     //   setTextCount(0)

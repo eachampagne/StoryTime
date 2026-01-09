@@ -13,6 +13,8 @@ io.on('connect', (socket) => {
       stopPromptCycle();
     }
   });
+
+  socket.on('new text', handleNewText);
 });
 
 const dummyData = [
@@ -83,8 +85,8 @@ function endRound() {
   }
 }
 
-function handleNewText() {
-
+function handleNewText(text, userId) {
+  console.log(`User ${userId} posted ${text}`);
 }
 
 function handleVote() {
