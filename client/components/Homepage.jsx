@@ -308,7 +308,7 @@ function Homepage() {
             Object.keys(posts).map((postId) => {
               console.log(postId);
               console.log(posts[postId]);
-              return <Post key={postId} text={posts[postId]}/>
+              return <Post key={postId} text={posts[postId]} postId={postId}/>
             })
           }
           {// posts.map((post) => {

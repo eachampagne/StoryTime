@@ -15,6 +15,8 @@ io.on('connect', (socket) => {
   });
 
   socket.on('new text', handleNewText);
+
+  socket.on('vote', handleVote);
 });
 
 const dummyData = [
@@ -103,17 +105,18 @@ function handleNewText(text, userId, username) {
     votes: 0
   };
   roundData.responses[responseIdCounter] = responseObject;
-  responseIdCounter++; // replace with DB id!
-
   // I could broadcast the new post to every client except the posting one,
   // but that would leave that client to add it to the screen itself. It seems
   // easier to treat it as any incoming message from the server rather than adding
   // special logic
   io.emit('new post', responseIdCounter, responseObject);
+
+  responseIdCounter++; // replace with DB id!
 }
 
-function handleVote() {
-
+function handleVote(postId, delta) {
+  roundData.responses[postId].votes += delta;
+  io.emit('vote', postId, delta);
 }
 
 function syncJustJoined(socket) {

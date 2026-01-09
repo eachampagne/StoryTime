@@ -3,7 +3,7 @@ import UpVote from './UpVote.jsx';
 //import axios from 'axios';
 import { useAuth } from './AuthContext.jsx';
 
-const Post = ({text}) => {
+const Post = ({text, postId}) => {
   //console.log(username)
     // access the user state with data from context
   const { user, logout } = useAuth();
@@ -45,7 +45,7 @@ const Post = ({text}) => {
        </div>
         <div className='text-context'>
       <p> <strong>{text.username}: </strong>{text.text} </p>
-      <UpVote text={text}/>
+      <UpVote text={text} postId={postId}/>
       <p className='timeStamp'>{newTimeStamp}</p>
     </div>
     </div>

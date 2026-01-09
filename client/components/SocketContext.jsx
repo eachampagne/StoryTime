@@ -31,6 +31,18 @@ export const SocketProvider = ({children, socket}) => {
       });
     });
 
+    socket.on('vote', (responseId, delta) => {
+      setResponses(prevState => {
+        return {
+          ...prevState,
+          [responseId]: {
+            ...prevState[responseId],
+            votes: prevState[responseId].votes + delta
+          }
+        }
+      });
+    });
+
     socket.on('round end', (data) => {
       // clear round-specific state data
       // rethinking this - it's causing a flicker
