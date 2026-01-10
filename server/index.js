@@ -1,11 +1,13 @@
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const { User } = require('./database/index')
-const app = express();
+const { app, server, io } = require('./socket.js');
+const control = require('./control.js');
+
 const port = process.env.PORT || 8080;
 
 // Middleware for serving static files
@@ -21,11 +23,11 @@ app.use(
     saveUninitialized: true,
   })
   );
-  
+
   // Initialize Passport.js
   app.use(passport.initialize());
   app.use(passport.session());
-  
+
 
 // Passport.js local strategy for user login
 passport.use(
@@ -73,14 +75,14 @@ const { app: routesApp } = require('./routes/routes');
 app.use('/', routesApp); // Mount routes
 
 app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, '../dist/index.html'), function(err) {
-      if (err) {
-        res.status(500).send(err)
-      }
-    })
+  res.sendFile(path.join(__dirname, '../dist/index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
   })
+})
 
 // Start the server
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port http://127.0.0.1:${port}`);
 });

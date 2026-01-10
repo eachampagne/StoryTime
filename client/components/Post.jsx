@@ -3,13 +3,12 @@ import UpVote from './UpVote.jsx';
 import axios from 'axios';
 import { useAuth } from './AuthContext.jsx';
 
-const Post = ({textId, text}) => {
+const Post = ({text, postId}) => {
   //console.log(username)
     // access the user state with data from context
-    console.log(textId, 'this is a key')
+    console.log(postId, 'this is a key')
   const { user, logout } = useAuth();
   console.log(user.username)
-  const [userId, setUserId] = useState(user.id);
 
   //const [username, setUsername] = useState('');
   const [newTimeStamp, setNewTimeStamp] = useState('')
@@ -36,14 +35,15 @@ const Post = ({textId, text}) => {
       minute: 'numeric',
     });
   
+    // this has no basis in reality
     setNewTimeStamp(`${formattedTime}-${formattedDate}`);
   
   }, []);
 
   // post request for the save-btn
   const saveButton = () => {
-    console.log(textId, 'HERE IS THE TEST ID')
-    axios.post(`/bookshelf/${userId}`, {textId})
+    console.log(postId, 'HERE IS THE TEST ID')
+    axios.post(`/bookshelf/${user.id}`, {textId: postId})
       .catch((err) => {
         console.error(err, 'error in post request for saveButton');
       })
@@ -54,8 +54,8 @@ const Post = ({textId, text}) => {
       <div className="upvote-container">
        </div>
         <div className='text-context'>
-      <p> <strong>{user.username}: </strong>{text.text} </p>
-      <UpVote text={text}/>
+      <p> <strong>{text.username}: </strong>{text.text} </p>
+      <UpVote text={text} postId={postId}/>
       <p className='timeStamp'>{newTimeStamp}</p>
       <button className='save-btn' onClick={saveButton}>Save</button>
     </div>

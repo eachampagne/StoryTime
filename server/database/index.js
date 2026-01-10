@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
 const orm = new Sequelize('stories', 'root', '', {
   host: '127.0.0.1',
-  dialect: 'mysql'
+  dialect: 'mysql',
+  logging: false
 });
 
 orm.authenticate().then(() => {
