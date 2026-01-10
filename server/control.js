@@ -110,12 +110,31 @@ async function endRound() {
     await Text.update(
       { winner: true},
       { where: {id: winningResponse.id} }
-    );
+    )
+      .catch((error) => console.error('Failed to mark winner:', error));
 
     winningText = winningResponse.text;
     console.log(`The winning text was ${winningText}`);
 
     // save winner, final votes, number of words matched to DB
+
+    // record final votes
+    // I am not 100% certain if trying to do all of these updates concurrently can cause conflicts of some kind
+    // doing this at round end means that if the server crashes or is stopped during a round, any votes cast won't be recorded
+    // but there wouldn't have been any badges awarded either
+    // this saves a bunch of database calls
+    // posts on the user page and bookshelf page will display 0 until the round is over and the page is refreshed
+    // but it's not like those pages will have every incoming message added immediately anyway
+    await Promise.all(
+      responsesArray.map(responseObj => {
+        return Text.update({
+          likes: responseObj.votes
+        }, {
+          where: {id: responseObj.id}
+        });
+      })
+    )
+      .catch((error) => console.error('Failed to record votes:', error));
 
     roundData.currentCanon.push(winningText);
   }
