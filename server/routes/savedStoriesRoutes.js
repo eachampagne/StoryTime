@@ -47,11 +47,19 @@ router.post('/:userId', (req, res) => {
 
 // })
 
-// // DELETE a story from the bookshelf. Maybe even just delete the bookshelf as a whole
-// router.delete('/bookshelf', (req, res) => {
+// DELETE a story from the bookshelf. Maybe even just delete the bookshelf as a whole
+router.delete('/:userId', (req, res) => {
+  UsersBookshelves.findOne({storyId: parseInt(req.body.textId), userId: parseInt(req.params.userId)})
+    .then((story) => {
+      console.log(story)
+      story.destroy();
+      res.status(201).send()
+    })
+    .catch((err) => {
+      console.error(err, 'POST error in savedStories')
+    })
 
-
-// })
+})
 
 
 // dummy POST for when user clicks the submit button

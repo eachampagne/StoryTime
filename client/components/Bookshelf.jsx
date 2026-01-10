@@ -75,7 +75,16 @@ const Bookshelf = () => {
       manipulateBadgeData();
     }, [userBadgesSt])
 
-
+    // delete the saved story
+    const deleteStory = () => {
+      axios.delete(`/bookshelf/${userId}`)
+        .then(() => {
+          console.log('story deleted')
+        })
+        .catch((err) => {
+          console.error(err, 'Cannot delete story');
+        })
+    }
 
   return (
     <div>
@@ -109,6 +118,7 @@ const Bookshelf = () => {
                           {/* <strong>Created:</strong> {entry.prompt.createdAt.substring(0, 10)} */}
                         </div>
                       </div>
+                      <button onClick={deleteStory}>Delete</button>
                     </div>
                   );
                 })}
