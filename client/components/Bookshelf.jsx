@@ -5,23 +5,23 @@ import { useAuth } from './AuthContext.jsx';
 
 const Bookshelf = () => {
 
-  console.log('test');
-    // access the user state with data from context
-    const { user, login, logout } = useAuth();
 
+    // access the user state with data from context
+    const { user, login, logout } = useAuth(); // this holds the object with the current logged in user
+    // console.log(useAuth());
     const [userId, setUserId] = useState(user.id);
     const [userTexts, setUserTexts] = useState([]);
     const [userBadgesSt, setUserBadgesSt] = useState('');
     const [userBadgeObj, setUserBadgeObj] = useState({Likeable: 0, Contributor: 0, Matcher: 0})
     const [username, setUsername] = useState(user.username);
     const [badgeId, setBadgeId] = useState(1)
-    // const [newUsername, setNewUsername] = useState('');
-  
-   
+
+    // gets username from the user object
+
     const getUserId = (username) => {
-      axios.get(`/user/${username}`)
-        .then((userData) => {
-          let user = userData.data[0];
+      axios.get(`/user/${username}`) // checks if user is authorized
+        .then((userData) => { // takes that  user object
+          let user = userData.data[0]; // should only be one object - will need to have a way to have no duplicate names
             if (user.badges) {
               setUserBadgesSt(user.badges)
             }
@@ -31,7 +31,22 @@ const Bookshelf = () => {
           console.error('Could not retrieve user ID', err, props.user)
         });
     };
-   
+
+    // test
+    const getSavedStories = () => {
+      axios.get(`/bookshelf/${userId}`)
+      .then((res) => {
+        setUserTexts(res.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      });
+    };
+    // test()
+    useEffect(() => {
+      getSavedStories()
+    }, [])
+    // leave - this splits the badges and makes them presentable
     const manipulateBadgeData = () => {
       userBadgesSt.split('+').forEach((badge) => {
         if(badge.length > 0){
@@ -39,44 +54,42 @@ const Bookshelf = () => {
         }
       })
     }
-  
-    //axios request to retrieve user texts by id
-    const getStoryWithResponse = (badgeId) => {
-      axios.get(`/text/user/${userId}`)
-      .then((texts) =>{
-        setUserTexts(texts.data);
-      })
-      .catch((err) => {
-        console.error('Could not retrieve texts!!', err);
-      });
-    };
-  
-    // // Function to update the username
-    // const handleUpdateUsername = () => {
-    //   axios
-    //     .put(`/user/${userId}`, { username: newUsername })
-    //     .then((response) => {
-    //       // Update the username in context
-    //       login({ ...user, username: newUsername });
-    //       setUsername(newUsername); // Update the local state
-    //     })
-    //     .catch((error) => {
-    //       console.error('Could not update username', error);
-    //     });
+
+    //axios request to retrieve user texts by id - Change
+    // const getStoryWithResponse = (badgeId) => {
+    //   axios.get(`/text/user/${userId}`)
+    //   .then((texts) =>{
+    //     setUserTexts(texts.data);
+    //   })
+    //   .catch((err) => {
+    //     console.error('Could not retrieve texts!!', err);
+    //   });
     // };
-  
+
+
     //runs when dom is compounded
     useEffect(() => {
       getUserId(username);
-      getStoryWithResponse(badgeId)
-    }, []);
-    
+      // getStoryWithResponse(badgeId)
+    }, []); // if no username , return an empty object
+
     //runs when userBadgeSt changes
     useEffect(() => {
       manipulateBadgeData();
     }, [userBadgesSt])
-  
 
+    // delete the saved story
+    const deleteStory = (textId) => {
+      console.log(textId)
+      axios.delete(`/bookshelf/${userId}`, {data: {textId}})
+        .then(() => {
+          console.log('story deleted');
+          getSavedStories();
+        })
+        .catch((err) => {
+          console.error(err, 'Cannot delete story');
+        })
+    }
 
   return (
     <div>
@@ -84,11 +97,11 @@ const Bookshelf = () => {
           <button className='user-button'>User</button>
       </Link>
           <div>
-              <h1 className='user-head'>MY STORIES</h1>
+              <h1 className='user-head'>MY SAVED STORIES</h1>
             <div className='user' >
                 <div className='user-data'>
                   <ul className='user-ul'>
-              {userTexts.map((entry) => {
+              {userTexts.map((entry) => { // probably going to need to replace this with the tabel of saved stories for that user
                   return (
                     <div key={entry.id} className='user-entry-box'>
                     <div
@@ -108,13 +121,12 @@ const Bookshelf = () => {
                           <strong>Likes:</strong> {entry.likes}
                            &nbsp;&nbsp;&nbsp;
                           {/* <strong>Created:</strong> {entry.prompt.createdAt.substring(0, 10)} */}
-      
                         </div>
                       </div>
+                      <button onClick={() => deleteStory(entry.id)}>Delete</button>
                     </div>
                   );
                 })}
-      
                   </ul>
                 </div>
             </div>

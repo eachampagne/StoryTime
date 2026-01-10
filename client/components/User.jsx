@@ -83,14 +83,14 @@ const User = () => {
     manipulateBadgeData();
   }, [userBadgesSt])
 
-  // adding a link thats a button - when clicked opens the /user/bookshelf - bookshelf component
+  // adding a link thats a button - when clicked opens the /bookshelf - bookshelf component
   return (
     <div>
       <nav>
         <Link to='/home' >
           <button className='user-home-button'>HomePage</button>
         </Link>
-        <Link to='/user/bookshelf' >
+        <Link to='/bookshelf' >
           <button className='user-bookshelf-button'>bookshelf</button>
         </Link>
       </nav>

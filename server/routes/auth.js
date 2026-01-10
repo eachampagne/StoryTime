@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
-const { User } = require('../database/index')
-const bcrypt = require('bcrypt')
+const { User } = require('../database/index');
+const bcrypt = require('bcrypt');
 
 const router = express.Router();
 

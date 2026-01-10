@@ -226,6 +226,19 @@ function Homepage() {
     setTextCount(event.target.value.length)
   }
 
+  
+//   // extra button for submit on click
+//   const fakeSubmit = () => {
+  
+//   posts.forEach((post) => {
+//     console.log(post.text)
+//     axios.post('/bookshelf')
+//     .catch((err) => {
+//       console.error(err, 'error in post request for saveButton');
+//     })
+//   })
+// }
+
   //function to handle user submit
   const handleSubmit = () => {
     console.log('submit');
