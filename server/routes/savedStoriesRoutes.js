@@ -22,6 +22,7 @@ router.get('/:userId', (req, res) => {
     })
     .catch((err) => {
       console.error(err, 'savedStoriesRoutes GET');
+      res.sendStatus(500);
     })
 
 })
@@ -36,6 +37,7 @@ router.post('/:userId', (req, res) => {
     })
     .catch((err) => {
       console.error(err, 'POST error in savedStories')
+      res.sendStatus(500);
     })
 });
 
@@ -57,6 +59,7 @@ router.delete('/:userId', (req, res) => {
     })
     .catch((err) => {
       console.error(err, 'POST error in savedStories')
+      res.sendStatus(500);
     })
 
 })
