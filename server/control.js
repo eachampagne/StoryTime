@@ -62,7 +62,8 @@ let stopAfterNext = false;
 let roundData = {
   words: [],
   responses: {},
-  currentCanon: []
+  currentCanon: [],
+  endsAt: 0
 }
 let badgeId;
 let promptId;
@@ -80,10 +81,14 @@ async function startRound() {
   });
   promptId = PromptEntry.id;
   roundData.words = words;
-  io.emit('new prompt', {
-    words
-  });
+
+  const endsAt = new Date() + roundDuration;
+  roundData.endsAt = endsAt;
   roundEndTimer = setTimeout(endRound, roundDuration);
+  io.emit('new prompt', {
+    words,
+    endsAt
+  });
 }
 
 async function endRound() {

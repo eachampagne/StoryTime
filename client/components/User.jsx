@@ -100,7 +100,7 @@ const User = () => {
             navigate({ pathname: '/' });
           } }>Logout</button>
         </div>
-        <Timer timerOnly={false} />
+        <Timer/>
       </nav>
         <h1 className='user-head'>MY STORIES</h1>
       <div className='user' >

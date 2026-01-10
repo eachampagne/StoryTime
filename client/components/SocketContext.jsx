@@ -13,6 +13,7 @@ export const SocketProvider = ({children, socket}) => {
       console.log(data);
       setPrompt(data.words);
       setResponses({});
+      setEndTime(data.endsAt);
     });
 
     socket.on('sync prompt', (data) => {
@@ -20,6 +21,7 @@ export const SocketProvider = ({children, socket}) => {
       setPrompt(data.words);
       setResponses(data.responses);
       setStory(data.currentCanon);
+      setEndTime(data.endsAt);
     });
 
     socket.on('new post', (responseId, responseObject) => {

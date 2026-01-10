@@ -107,7 +107,7 @@ const Bookshelf = () => {
             navigate({ pathname: '/' });
           } }>Logout</button>
         </div>
-        <Timer timerOnly={false} />
+        <Timer/>
       </nav>
           <div>
               <h1 className='user-head'>MY SAVED STORIES</h1>
