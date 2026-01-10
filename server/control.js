@@ -97,10 +97,21 @@ async function endRound() {
     // find the best response to add to the canon
 
     // transform responses obj to arr to reuse the logic from client/badgeHelpers/bestOf
-    const responsesArray = Object.keys(roundData.responses).map((key) => roundData.responses[key]);
+    const responsesArray = Object.keys(roundData.responses).map((key) => {
+      const responseObj = roundData.responses[key];
+      responseObj.id = key;
+      return responseObj;
+    });
     const winningResponse = responsesArray.reduce((acc, current) => {
       return current.votes > acc.votes ? current : acc; // ties are broken by which comes first in the Object.keys() array
     });
+
+    // mark winning text in DB
+    await Text.update(
+      { winner: true},
+      { where: {id: winningResponse.id} }
+    );
+
     winningText = winningResponse.text;
     console.log(`The winning text was ${winningText}`);
 
@@ -114,6 +125,8 @@ async function endRound() {
   roundData.responses = {};
 
   io.emit('round end', winningText); // TODO: send winner info?
+  // it's ok that winningText might be an empty string, because in that case there were no entries
+  // so the story is ending anyway
 
   if (stopAfterNext || (numResponses === 0)) {
     endStory();
