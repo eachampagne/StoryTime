@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import {Link, useNavigate } from 'react-router-dom';
 import axios from'axios';
 import Post from './Post.jsx';
-import Timer from './Timer.jsx'
+import Timer from './Timer.jsx';
 import {promptWinner, awardCeremony} from '../badgeHelpers/bestOf.jsx';
 import User from './User.jsx';
 import { useAuth } from './AuthContext.jsx';
@@ -273,15 +273,16 @@ function Homepage() {
           <Link to="/user">
             <button className='user-btn'>User</button>
           </Link>
+          <Link to='/bookshelf' >
+            <button className='user-bookshelf-button'>bookshelf</button>
+          </Link>
           <div>
               <button className='user-btn' onClick={ () => {
                 logout();
                 navigate({ pathname: '/' });
               } }>Logout</button>
           </div>
-          <div>
-            {/*<Timer minutes={minutes} seconds={seconds} />*/}
-          </div>
+          <Timer timerOnly={true} />
         </div>
       </nav>
 
