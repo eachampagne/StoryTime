@@ -1,16 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const {  UsersBookshelves} = require('../database/index');
+const { Text, UsersBookshelves} = require('../database/index');
 
 // // GET to get all the saved stories with the users id
 router.get('/:userId', (req, res) => {
   // needs to get all stories that the current user logged in has saved
   console.log(req.params, 'EHL;L;LPOFJOSHNKJBHSJB')
   UsersBookshelves.findAll({where: {userId: parseInt(req.params.userId)}})
-    .then((savedText) => {
+    .then((savedTexts) => {
       //console.log(data)
-      
-      res.status(200).send(savedText); // change
+      // need to find the text that matches the storyId
+      const storyIds = savedTexts.map((text) => {
+        return text.storyId
+        // now find the text that match
+      })
+      return Text.findAll({where: {id: storyIds}})
+      // res.status(200).send(savedText); // change
+    })
+    .then((storys) => {
+      res.status(200).send(storys);
     })
     .catch((err) => {
       console.error(err, 'savedStoriesRoutes GET');
