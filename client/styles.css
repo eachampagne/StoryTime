@@ -2,7 +2,7 @@ body, html {
   margin: 0;
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background-image: url(./images/newBookshelfBackground.jpg);
+  background-image: url(./images/fullBackground.jpg);
 }
 
 .wrapper {
