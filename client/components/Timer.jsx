@@ -16,7 +16,7 @@ const Timer = ({ timerOnly = false }) => {
   const refreshTimeString = () => {
     const remainingMs = endTime - (new Date()).getTime();
     setTimeString(calculateTimeString(remainingMs));
-    setTimer(setTimeout(refreshTimeString));
+    setTimer(setTimeout(refreshTimeString, 100)); // refreshes every tenth of a second
   };
 
   const calculateTimeString = (remainingMs) => {
