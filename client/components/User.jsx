@@ -91,7 +91,7 @@ const User = () => {
           <button className='user-home-button'>HomePage</button>
         </Link>
         <Link to='/bookshelf' >
-          <button className='user-bookshelf-button'>bookshelf</button>
+          <button className='user-bookshelf-button'>Bookshelf</button>
         </Link>
       </nav>
         <h1 className='user-head'>MY STORIES</h1>
@@ -99,6 +99,7 @@ const User = () => {
           <div className='user-data'>
             <ul className='user-ul'>
         {userTexts.map((entry) => {
+          console.log(entry)
             return (
               <div key={entry.id} className='user-entry-box'>
               <div
@@ -106,16 +107,16 @@ const User = () => {
                   entry={entry}
                 >
                   <div>
-                    <strong>Username:</strong> {username}
+                    <strong>Username: {username}</strong>
                   </div>
                   <div>
                     {/* <strong>Story:</strong> {entry.prompt.matchWords} */}
                   </div>
                   <div>
-                    <strong></strong> {entry.text}
+                    <strong>{entry.text}</strong>
                   </div>
                   <div className='small-text'>
-                    <strong>Likes:</strong> {entry.likes}
+                    <strong>Likes: {entry.likes}</strong>
                      &nbsp;&nbsp;&nbsp;
                     {/* <strong>Created:</strong> {entry.prompt.createdAt.substring(0, 10)} */}
 

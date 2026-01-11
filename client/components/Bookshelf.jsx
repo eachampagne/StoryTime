@@ -109,21 +109,21 @@ const Bookshelf = () => {
                         entry={entry}
                       >
                         <div>
-                          <strong>Username:</strong> {username}
+                          <strong>Username: {username}</strong>
                         </div>
                         <div>
                           {/* <strong>Story:</strong> {entry.prompt.matchWords} */}
                         </div>
                         <div>
-                          <strong></strong> {entry.text}
+                          <strong>{entry.text}</strong>
                         </div>
                         <div className='small-text'>
-                          <strong>Likes:</strong> {entry.likes}
+                          <strong>Likes: {entry.likes}</strong>
                            &nbsp;&nbsp;&nbsp;
                           {/* <strong>Created:</strong> {entry.prompt.createdAt.substring(0, 10)} */}
                         </div>
                       </div>
-                      <button onClick={() => deleteStory(entry.id)}>Delete</button>
+                      <button className="delete-btn" onClick={() => deleteStory(entry.id)}>Delete</button>
                     </div>
                   );
                 })}
