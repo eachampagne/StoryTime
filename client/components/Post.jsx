@@ -21,7 +21,10 @@ const Post = ({text, postId}) => {
       minute: 'numeric',
     });
   
-    // this has no basis in reality
+    // this has no basis in reality - what if the post was submitted 10 minutes ago
+    // (assuming rounds are longer) and the client is just syncing up now?
+    // the correct solution is to save the timestamp on the responseObject when the server receives the text
+    // but I'm out of time, sorry developers of the future
     setNewTimeStamp(`${formattedTime}-${formattedDate}`);
   
   }, []);
@@ -41,7 +44,11 @@ const Post = ({text, postId}) => {
         <div className='text-context'>
       <p> <strong>{text.username}: </strong>{text.text} </p>
       <UpVote text={text} postId={postId}/>
-      <p className='timeStamp'>{newTimeStamp}</p>
+      {/*
+        Timestamp should go here but the time data should come from the server,
+        not be the time this component happens to be rendered
+        <p className='timeStamp'>{newTimeStamp}</p>
+      */}
       <button className='save-btn' onClick={saveButton}>Save</button>
     </div>
     </div>
