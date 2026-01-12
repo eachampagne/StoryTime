@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useAuth } from './AuthContext.jsx';
+import Timer from './Timer.jsx';
 
 const Bookshelf = () => {
-
+    const navigate = useNavigate();
 
     // access the user state with data from context
     const { user, login, logout } = useAuth(); // this holds the object with the current logged in user
@@ -93,9 +94,21 @@ const Bookshelf = () => {
 
   return (
     <div>
-      <Link to='/user' >
+      <nav>
+        <Link to='/home' >
+          <button className='user-home-button'>HomePage</button>
+        </Link>
+        <Link to='/user' >
           <button className='user-button'>User</button>
-      </Link>
+        </Link>
+        <div>
+          <button className='user-btn' onClick={ () => {
+            logout();
+            navigate({ pathname: '/' });
+          } }>Logout</button>
+        </div>
+        <Timer/>
+      </nav>
           <div>
               <h1 className='user-head'>MY SAVED STORIES</h1>
             <div className='user' >
@@ -109,21 +122,21 @@ const Bookshelf = () => {
                         entry={entry}
                       >
                         <div>
-                          <strong>Username:</strong> {username}
+                          <strong>Username: {username}</strong>
                         </div>
                         <div>
                           {/* <strong>Story:</strong> {entry.prompt.matchWords} */}
                         </div>
                         <div>
-                          <strong></strong> {entry.text}
+                          <strong>{entry.text}</strong>
                         </div>
                         <div className='small-text'>
-                          <strong>Likes:</strong> {entry.likes}
+                          <strong>Likes: {entry.likes}</strong>
                            &nbsp;&nbsp;&nbsp;
                           {/* <strong>Created:</strong> {entry.prompt.createdAt.substring(0, 10)} */}
                         </div>
                       </div>
-                      <button onClick={() => deleteStory(entry.id)}>Delete</button>
+                      <button className="delete-btn" onClick={() => deleteStory(entry.id)}>Delete</button>
                     </div>
                   );
                 })}

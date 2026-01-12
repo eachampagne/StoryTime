@@ -33,7 +33,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <input
@@ -52,7 +52,7 @@ const Login = () => {
       </form>
       <Link to='/register'>
       <button>
-        register
+        Register
       </button>
       </Link>
     </div>
