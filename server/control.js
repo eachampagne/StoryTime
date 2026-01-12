@@ -3,12 +3,16 @@ const axios = require('axios');
 const { Prompt, Badges, Text } = require('./database');
 const { io } = require('./socket.js');
 
+const getCachedData = require('./data.js');
+
+const useLive = !!parseInt(process.env.USE_LIVE_DATA); // cast to boolean
+
 io.on('connect', (socket) => {
-  console.log('user connected');
+  console.info('user connected');
   syncJustJoined(socket);
 
   socket.on('disconnect', () => {
-    console.log('a user disconnected');
+    console.info('a user disconnected');
     if (io.engine.clientsCount === 0) {
       stopPromptCycle();
     }
@@ -19,44 +23,21 @@ io.on('connect', (socket) => {
   socket.on('vote', handleVote);
 });
 
-const dummyData = [
-  ['this', 'is', 'a', 'test', 'array'],
-  ['this', 'is', 'test', 'array', '2'],
-  ['this', 'is', 'test', 'array', '3'],
-  ['this', 'is', 'test', 'array', '4'],
-  ['this', 'is', 'test', 'array', '5']
-];
-let dummyCounter = 0;
-
-// TODO: have way to select from vetted prompts
-// Note: save to DB functionality now in startRound() rather than generateNewPrompt()
 function generateNewPrompt() {
-  // return axios.get('https://random-word-api.herokuapp.com/word?number=5')
-  //   .then((response) => {
-  //     const words = response.data;
-  //     // save words to DB
-  //     return Badges.findOne({order: [['id', 'DESC']]})
-  //       .then((badge) => {
-  //         return Prompt.create({
-  //           matchWords: words.join(' '),
-  //           badgeId: badge.id
-  //         })
-  //           .then(() => {
-  //             return words;
-  //           })
-  //       })
-  //       .catch((error) => {
-  //         console.error('Failed to save words to database:',error);
-  //       })
-  //   })
-  //   .catch((error) => {
-  //     console.error('Failed to get words from API', error);
-  //   });
-  dummyCounter++;
-  return new Promise((resolve, reject) => resolve(dummyData[dummyCounter % dummyData.length]));
+  if (useLive) {
+    return axios.get('https://random-word-api.herokuapp.com/word?number=5')
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.error('Failed to get words from API', error);
+      });
+  } else {
+    return getCachedData();
+  }
 }
 
-const roundDuration = 20000; // TODO: move to env variable?
+const roundDuration = parseInt(process.env.MS_BETWEEN_PROMPTS); // TODO: move to env variable?
 let roundEndTimer = null;
 let stopAfterNext = false;
 let roundData = {
@@ -69,7 +50,6 @@ let badgeId;
 let promptId;
 
 async function startRound() {
-  console.log('starting a new round');
   const words = await generateNewPrompt()
   .catch((error) => {
     console.error('Failed to generate new prompt:', error);
@@ -92,10 +72,7 @@ async function startRound() {
 }
 
 async function endRound() {
-  console.log('ending a round');
-
   const numResponses = Object.keys(roundData.responses).length;
-  console.log(`got ${numResponses} responses`);
 
   let winningText = '';
   if (numResponses) {
@@ -119,7 +96,6 @@ async function endRound() {
       .catch((error) => console.error('Failed to mark winner:', error));
 
     winningText = winningResponse.text;
-    console.log(`The winning text was ${winningText}`);
 
     // save winner, final votes, number of words matched to DB
 
@@ -166,9 +142,6 @@ async function endRound() {
 }
 
 async function handleNewText(text, userId, username) {
-  console.log(`User ${userId} posted ${text}`);
-  // TODO: integrate with database!!
-
   const newTextEntry = await Text.create({
     text,
     userId,
@@ -203,16 +176,7 @@ function syncJustJoined(socket) {
   startPromptCycle();
 }
 
-// function startStory() {
-//   console.log('starting story')
-
-// }
-
 async function endStory() {
-  console.log('ending story');
-  console.log('Final canon:');
-  console.log(roundData.currentCanon);
-
   // TODO: award logic here
 
   roundData.currentCanon = [];
@@ -225,7 +189,6 @@ async function endStory() {
           console.error('Failed to create badge:', error)
         })
       badgeId = newBadge.id;
-      console.log(`new badge id: ${badgeId}`);
     startRound();
   } else {
     roundEndTimer = null; // clear timer to make it clear no rounds are in progress
@@ -233,7 +196,7 @@ async function endStory() {
 }
 
 async function startPromptCycle() {
-  console.log('starting a cycle');
+  console.info('starting a cycle');
   stopAfterNext = false;
   if (roundEndTimer === null) { // check that there's no round in progress before creating the new badge
     // just in case someone disconnects, then reconnects during the same cycle
@@ -242,13 +205,12 @@ async function startPromptCycle() {
         console.error('Failed to create badge:', error)
       })
     badgeId = newBadge.id;
-    console.log(`new badge id: ${badgeId}`);
     startRound(); // don't start a new round while the current one is in progress
   }
 }
 
 function stopPromptCycle() {
-  console.log('cycle will end');
+  console.info('cycle will end');
   stopAfterNext = true;
 }
 
