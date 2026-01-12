@@ -9,7 +9,6 @@ const Bookshelf = () => {
 
     // access the user state with data from context
     const { user, login, logout } = useAuth(); // this holds the object with the current logged in user
-    // console.log(useAuth());
     const [userId, setUserId] = useState(user.id);
     const [userTexts, setUserTexts] = useState([]);
     const [userBadgesSt, setUserBadgesSt] = useState('');
@@ -24,30 +23,28 @@ const Bookshelf = () => {
         .then((userData) => { // takes that  user object
           let user = userData.data[0]; // should only be one object - will need to have a way to have no duplicate names
             if (user.badges) {
-              setUserBadgesSt(user.badges)
+              setUserBadgesSt(user.badges);
             }
             setUserId(user.id);
         })
         .catch((err) => {
-          console.error('Could not retrieve user ID', err, props.user)
+          console.error('Could not retrieve user ID', err, props.user);
         });
     };
 
-    // test
+
     const getSavedStories = () => {
       axios.get(`/bookshelf/${userId}`)
       .then((res) => {
-        setUserTexts(res.data)
+        setUserTexts(res.data);
       })
       .catch((err) => {
-        console.error(err)
+        console.error(err);
       });
     };
-    // test()
     useEffect(() => {
-      getSavedStories()
+      getSavedStories();
     }, [])
-    // leave - this splits the badges and makes them presentable
     const manipulateBadgeData = () => {
       userBadgesSt.split('+').forEach((badge) => {
         if(badge.length > 0){
@@ -55,17 +52,6 @@ const Bookshelf = () => {
         }
       })
     }
-
-    //axios request to retrieve user texts by id - Change
-    // const getStoryWithResponse = (badgeId) => {
-    //   axios.get(`/text/user/${userId}`)
-    //   .then((texts) =>{
-    //     setUserTexts(texts.data);
-    //   })
-    //   .catch((err) => {
-    //     console.error('Could not retrieve texts!!', err);
-    //   });
-    // };
 
 
     //runs when dom is compounded
@@ -81,10 +67,9 @@ const Bookshelf = () => {
 
     // delete the saved story
     const deleteStory = (textId) => {
-      console.log(textId)
       axios.delete(`/bookshelf/${userId}`, {data: {textId}})
         .then(() => {
-          console.log('story deleted');
+          console.info('story deleted');
           getSavedStories();
         })
         .catch((err) => {

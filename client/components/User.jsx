@@ -107,7 +107,6 @@ const User = () => {
           <div className='user-data'>
             <ul className='user-ul'>
         {userTexts.map((entry) => {
-          console.log(entry)
             return (
               <div key={entry.id} className='user-entry-box'>
               <div
