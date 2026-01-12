@@ -122,9 +122,6 @@ const Bookshelf = () => {
                         entry={entry}
                       >
                         <div>
-                          <strong>Username: {username}</strong>
-                        </div>
-                        <div>
                           {/* <strong>Story:</strong> {entry.prompt.matchWords} */}
                         </div>
                         <div>
