@@ -10,20 +10,19 @@ export const SocketProvider = ({children, socket}) => {
 
   useEffect(() => {
     socket.on('new prompt', (data) => {
-      console.log(data);
       setPrompt(data.words);
       setResponses({});
+      setEndTime(data.endsAt);
     });
 
     socket.on('sync prompt', (data) => {
-      console.log(data);
       setPrompt(data.words);
       setResponses(data.responses);
       setStory(data.currentCanon);
+      setEndTime(data.endsAt);
     });
 
     socket.on('new post', (responseId, responseObject) => {
-      console.log(`received message from ${responseObject.username} that says ${responseObject.text}`);
       setResponses(prevState => {
         return {
           ...prevState,

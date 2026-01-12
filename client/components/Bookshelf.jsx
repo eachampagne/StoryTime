@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useAuth } from './AuthContext.jsx';
+import Timer from './Timer.jsx';
 
 const Bookshelf = () => {
-
+    const navigate = useNavigate();
 
     // access the user state with data from context
     const { user, login, logout } = useAuth(); // this holds the object with the current logged in user
@@ -93,9 +94,21 @@ const Bookshelf = () => {
 
   return (
     <div>
-      <Link to='/user' >
+      <nav>
+        <Link to='/home' >
+          <button className='user-home-button'>HomePage</button>
+        </Link>
+        <Link to='/user' >
           <button className='user-button'>User</button>
-      </Link>
+        </Link>
+        <div>
+          <button className='user-btn' onClick={ () => {
+            logout();
+            navigate({ pathname: '/' });
+          } }>Logout</button>
+        </div>
+        <Timer/>
+      </nav>
           <div>
               <h1 className='user-head'>MY SAVED STORIES</h1>
             <div className='user' >

@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useAuth } from './AuthContext.jsx';
+import Timer from './Timer.jsx';
 // import { Navigate } from 'react-router-dom';
 
 const User = () => {
-
+  const navigate = useNavigate();
 
   // access the user state with data from context
   const { user, login, logout } = useAuth();
@@ -93,6 +94,13 @@ const User = () => {
         <Link to='/bookshelf' >
           <button className='user-bookshelf-button'>Bookshelf</button>
         </Link>
+        <div>
+          <button className='user-btn' onClick={ () => {
+            logout();
+            navigate({ pathname: '/' });
+          } }>Logout</button>
+        </div>
+        <Timer/>
       </nav>
         <h1 className='user-head'>MY STORIES</h1>
       <div className='user' >
