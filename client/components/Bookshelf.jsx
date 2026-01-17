@@ -4,7 +4,9 @@ import {Link, useNavigate} from 'react-router-dom'
 import { useAuth } from './AuthContext.jsx';
 import Timer from './Timer.jsx';
 
+
 const Bookshelf = () => {
+
     const navigate = useNavigate();
 
     // access the user state with data from context
@@ -18,6 +20,11 @@ const Bookshelf = () => {
 
     // gets username from the user object
 
+    /**
+    * getUserID takes in the username that comes from the useAuth function. 'username' as a variable
+    * gets set with useState. This GET request should only have one document with the users
+    * information, and we grab the badges and the userId from the object.
+    */
     const getUserId = (username) => {
       axios.get(`/user/${username}`) // checks if user is authorized
         .then((userData) => { // takes that  user object
@@ -32,7 +39,13 @@ const Bookshelf = () => {
         });
     };
 
-
+    /**
+     * getSavedStories will take in the userId and search the database for and row that
+     * has the userId as a value on the usersBookshelves table. With the response it returns,
+     * it will set the UserTexts to that data so it can be displayed later. Also, the getSavedStories
+     * was called again so that the user didn't need to refresh the page when making changes.
+     * Reused the badge manipulating function that was already provided in the User component.
+     */
     const getSavedStories = () => {
       axios.get(`/bookshelf/${userId}`)
       .then((res) => {
@@ -58,14 +71,18 @@ const Bookshelf = () => {
     useEffect(() => {
       getUserId(username);
       // getStoryWithResponse(badgeId)
-    }, []); // if no username , return an empty object
+    }, []);
 
     //runs when userBadgeSt changes
     useEffect(() => {
       manipulateBadgeData();
     }, [userBadgesSt])
 
-    // delete the saved story
+    /**
+     * deleteStory allows the user to click the delete button on a story text
+     * that they saved, and the savedStory gets complete deleted from the
+     * usersBookshelves table. Once it is deleted, the story is gone forever.
+     */
     const deleteStory = (textId) => {
       axios.delete(`/bookshelf/${userId}`, {data: {textId}})
         .then(() => {
@@ -77,6 +94,12 @@ const Bookshelf = () => {
         })
     }
 
+  /**
+   * Everything in the return is what will be rendered to the page. It starts with the basics
+   * buttons to go back to the homepage and user page. Then it shows a collection of
+   * saved stories. Inside of these stories will also have the buttons for deleting
+   * a story from the list. At the very bottom, badges are also being displayed.
+   */
   return (
     <div>
       <nav>
@@ -99,7 +122,7 @@ const Bookshelf = () => {
             <div className='user' >
                 <div className='user-data'>
                   <ul className='user-ul'>
-              {userTexts.map((entry) => { // probably going to need to replace this with the tabel of saved stories for that user
+              {userTexts.map((entry) => { // probably going to need to replace this with the table of saved stories for that user
                   return (
                     <div key={entry.id} className='user-entry-box'>
                     <div
