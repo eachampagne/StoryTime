@@ -55,6 +55,7 @@ export const SocketProvider = ({children, socket}) => {
     // I'm not sure this is necessary for an empty dependency list
     return () => {
       socket.removeAllListeners();
+      socket.disconnect();
     };
   }, []);
 

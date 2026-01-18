@@ -28,7 +28,6 @@ is the heart of Storytime: allowing users to collaborate with one another, and c
 ### Built With
 
 * React-Hooks
-* AWS ec2
 * DayJs
 * Trello
 * Google Auth (Passport)
@@ -40,7 +39,8 @@ is the heart of Storytime: allowing users to collaborate with one another, and c
 * Babel
 * Webpack
 * API: https://random-word-api
-
+* Greenfield hosted with AWS ec2
+* Legacy hosted with Microsoft Azure Virtual Machine
 
 ### Contributors
 
@@ -98,12 +98,23 @@ This is an example of how to list things you need to use the software and how to
    npm start
    ```
 
-   ### BUGS
+### Environment Variables
 
-   * After logging in, on reload user becomes logged out and has to log back in to experience app functionality.
-   * If user is eligible for more than one badge, they just receive one instead of multiple.
-   * User can upvote/downvote more than once.
-   * Sometimes the Timer gets out of sync from when the round and story ends.
+The random words API does not require an API key, so (as of now) there is no sensitive data in the .env file.
+
+* USE_LIVE_DATA - toggles whether the server generates new prompts by querying the API, or by using the data in /server/data.js.
+* MS_BETWEEN_PROMPTS - sets the time for a single round in milliseconds. 20000-30000 (20-30 s) is good for testing, but in production this should probably be on the order of an hour (3600000 ms).
+
+### Architecture
+
+See [websocket and architecture README](README-architecture.md).
+
+### BUGS
+
+* After logging in, on reload user becomes logged out and has to log back in to experience app functionality.
+* If user is eligible for more than one badge, they just receive one instead of multiple.
+* User can upvote/downvote more than once.
+* Sometimes the Timer gets out of sync from when the round and story ends.
 
 
 ### Contributing
